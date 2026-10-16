@@ -27,3 +27,16 @@ h1,h2,h3{font-family:Arial,Helvetica,sans-serif;font-weight:700;letter-spacing:-
 .product-card:hover{border-color:#ffffff30;box-shadow:0 14px 36px #0003}
 .btn{transition:background .25s,transform .25s}.btn:hover{transform:translateY(-2px)}.btn:active{transform:translateY(0)}
 @media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1;translate:none;transition:none!important}.btn:hover{transform:none}}
+
+/* A little more depth, without taking control of scrolling. */
+.hero-carousel{transform:translateY(var(--hero-depth,0px));transition:transform .16s linear}
+.hero-carousel:before{border-top-color:#ffffff26;border-right-color:#ffffff08;animation:orbit-ring 34s linear infinite}
+.hero-carousel:after{border-bottom-color:#ed383c30;border-left-color:#ffffff08;animation:orbit-ring 46s linear infinite reverse}
+@keyframes orbit-ring{to{rotate:360deg}}
+.scroll-reveal{translate:0 36px;transition-duration:.85s,1s}
+.scroll-reveal.scroll-visible{translate:0 0}
+.product-card,.card{position:relative;transform:perspective(1100px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform .28s ease,border-color .3s,box-shadow .3s,opacity .85s ease var(--reveal-delay,0ms),translate 1s cubic-bezier(.22,1,.36,1) var(--reveal-delay,0ms)}
+.product-card:after,.card:after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--light-x,50%) var(--light-y,30%),#ffffff09,transparent 60%);transition:opacity .35s}
+@media(hover:hover) and (pointer:fine){.product-card:hover,.card:hover{transform:perspective(1100px) translateY(-5px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));border-color:#ffffff36}.product-card:hover:after,.card:hover:after{opacity:1}.product-card:hover .product-photo img{transform:scale(1.055)}}
+nav a{position:relative}nav a:not(.nav-contact):after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:1px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .3s}nav a:not(.nav-contact):hover:after,nav a[aria-current=page]:not(.nav-contact):after{transform:scaleX(1)}
+@media(prefers-reduced-motion:reduce){.hero-carousel,.product-card,.card{transform:none!important}.hero-carousel:before,.hero-carousel:after{animation:none!important}.scroll-reveal{opacity:1;translate:none!important}.product-photo img{transform:none!important}}
