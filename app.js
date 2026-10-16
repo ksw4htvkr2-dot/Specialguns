@@ -32,3 +32,47 @@ const filters=document.querySelectorAll('[data-filter]');function filter(value){
  const showAll=()=>{if(motion.matches){elements.forEach(e=>e.classList.add('scroll-visible'));observer.disconnect();}};
  motion.addEventListener('change',showAll);
 })();
+
+// Gentle scroll depth and pointer response; the page always scrolls normally.
+(() => {
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const hero=document.querySelector('.hero');
+ let frame=0;
+ const update=()=>{
+  frame=0;
+  if(!hero||reduced.matches)return;
+  const rect=hero.getBoundingClientRect();
+  if(rect.bottom<0||rect.top>innerHeight)return;
+  const progress=Math.max(0,Math.min(1,-rect.top/rect.height));
+  hero.style.setProperty('--hero-depth',`${progress*38}px`);
+ };
+ const scroll=()=>{if(!frame)frame=requestAnimationFrame(update);};
+ addEventListener('scroll',scroll,{passive:true});
+ addEventListener('resize',scroll,{passive:true});
+ update();
+ const fine=matchMedia('(hover: hover) and (pointer: fine)');
+ document.querySelectorAll('.product-card,.card').forEach(card=>{
+  let pointerFrame=0;
+  const reset=()=>{
+   cancelAnimationFrame(pointerFrame);pointerFrame=0;
+   card.style.removeProperty('--tilt-x');card.style.removeProperty('--tilt-y');
+   card.style.removeProperty('--light-x');card.style.removeProperty('--light-y');
+  };
+  card.addEventListener('pointermove',event=>{
+   if(reduced.matches||!fine.matches)return;
+   cancelAnimationFrame(pointerFrame);
+   pointerFrame=requestAnimationFrame(()=>{
+    const rect=card.getBoundingClientRect();
+    const x=Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));
+    const y=Math.max(0,Math.min(1,(event.clientY-rect.top)/rect.height));
+    card.style.setProperty('--tilt-x',`${(0.5-y)*2.4}deg`);
+    card.style.setProperty('--tilt-y',`${(x-0.5)*2.4}deg`);
+    card.style.setProperty('--light-x',`${x*100}%`);
+    card.style.setProperty('--light-y',`${y*100}%`);
+   });
+  });
+  card.addEventListener('pointerleave',reset);
+  reduced.addEventListener('change',reset);
+ });
+ reduced.addEventListener('change',()=>{if(reduced.matches)hero?.style.removeProperty('--hero-depth');else update();});
+})();
