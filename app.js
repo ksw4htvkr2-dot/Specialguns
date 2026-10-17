@@ -5,7 +5,7 @@ const filters=document.querySelectorAll('[data-filter]');function filter(value){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  let index=0,timer=null,changing=false;
  slides.forEach(slide=>{
-  slide.style.transition='opacity 320ms ease-in-out';
+  slide.style.transition='opacity 500ms cubic-bezier(.4,0,.2,1)';
   slide.style.filter='none';
   slide.style.transform='none';
  });
@@ -31,9 +31,9 @@ const filters=document.querySelectorAll('[data-filter]');function filter(value){
   previous.classList.remove('is-active');
   previous.classList.add('is-leaving');
   previous.setAttribute('aria-hidden','true');
-  fallback=setTimeout(()=>revealNext(),380);
+  fallback=setTimeout(()=>revealNext(),560);
  }
- function sync(){clearInterval(timer);if(!reduced.matches&&!document.hidden)timer=setInterval(advance,6000);}
+ function sync(){clearInterval(timer);if(!reduced.matches&&!document.hidden)timer=setInterval(advance,5000);}
  document.addEventListener('visibilitychange',sync);
  reduced.addEventListener('change',sync);sync();
 })();
