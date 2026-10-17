@@ -99,3 +99,34 @@ const filters=document.querySelectorAll('[data-filter]');function filter(value){
  hero.addEventListener('pointercancel',reset);
  reduced.addEventListener('change',reset);fine.addEventListener('change',reset);
 })();
+
+// Maps stays disconnected until the visitor explicitly loads it.
+(() => {
+ const frame=document.getElementById('location-map');
+ const load=document.getElementById('load-map');
+ const disable=document.getElementById('disable-map');
+ const status=document.getElementById('map-status');
+ const placeholder=frame?.querySelector('.map-consent');
+ if(!frame||!load||!disable||!placeholder)return;
+ let iframe=null;
+ load.addEventListener('click',()=>{
+  if(iframe)return;
+  iframe=document.createElement('iframe');
+  iframe.title='Google Maps: KK Specialguns, Laxenburgerstraße 152, Vösendorf';
+  iframe.width='1200';iframe.height='460';
+  iframe.referrerPolicy='no-referrer';
+  iframe.allowFullscreen=true;
+  iframe.src='https://maps.google.com/maps?q=Laxenburgerstra%C3%9Fe%20152%2C%202331%20V%C3%B6sendorf&z=15&output=embed';
+  placeholder.hidden=true;
+  frame.append(iframe);
+  disable.hidden=false;
+  status.textContent='Google Maps ist für diesen Seitenaufruf aktiviert.';
+  disable.focus({preventScroll:true});
+ });
+ disable.addEventListener('click',()=>{
+  iframe?.remove();iframe=null;
+  placeholder.hidden=false;disable.hidden=true;
+  status.textContent='Die Karte ist deaktiviert. Bereits an Google übermittelte Daten oder dort gesetzte Cookies werden dadurch nicht gelöscht.';
+  load.focus({preventScroll:true});
+ });
+})();
