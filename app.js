@@ -33,7 +33,7 @@ const filters=document.querySelectorAll('[data-filter]');function filter(value){
   previous.setAttribute('aria-hidden','true');
   fallback=setTimeout(()=>revealNext(),380);
  }
- function sync(){clearInterval(timer);if(!reduced.matches&&!document.hidden)timer=setInterval(advance,8000);}
+ function sync(){clearInterval(timer);if(!reduced.matches&&!document.hidden)timer=setInterval(advance,6000);}
  document.addEventListener('visibilitychange',sync);
  reduced.addEventListener('change',sync);sync();
 })();
