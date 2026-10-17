@@ -76,3 +76,26 @@ const filters=document.querySelectorAll('[data-filter]');function filter(value){
  });
  reduced.addEventListener('change',()=>{if(reduced.matches)hero?.style.removeProperty('--hero-depth');else update();});
 })();
+
+// Small pointer repulsion for hero motifs, independent of the slide animation.
+(() => {
+ const hero=document.querySelector('.hero-carousel');if(!hero)return;
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const fine=matchMedia('(hover: hover) and (pointer: fine)');
+ let pending=0;
+ const reset=()=>{cancelAnimationFrame(pending);pending=0;hero.style.setProperty('--pointer-x','0px');hero.style.setProperty('--pointer-y','0px');};
+ hero.addEventListener('pointermove',event=>{
+  if(reduced.matches||!fine.matches)return;
+  cancelAnimationFrame(pending);
+  pending=requestAnimationFrame(()=>{
+   const rect=hero.getBoundingClientRect();
+   const x=Math.max(-1,Math.min(1,(event.clientX-rect.left-rect.width/2)/(rect.width/2)));
+   const y=Math.max(-1,Math.min(1,(event.clientY-rect.top-rect.height/2)/(rect.height/2)));
+   hero.style.setProperty('--pointer-x',`${-x*9}px`);
+   hero.style.setProperty('--pointer-y',`${-y*7}px`);
+  });
+ });
+ hero.addEventListener('pointerleave',reset);
+ hero.addEventListener('pointercancel',reset);
+ reduced.addEventListener('change',reset);fine.addEventListener('change',reset);
+})();
