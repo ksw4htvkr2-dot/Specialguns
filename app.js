@@ -3,8 +3,22 @@ const filters=document.querySelectorAll('[data-filter]');function filter(value){
  const carousel=document.querySelector('.hero-carousel');if(!carousel)return;
  const slides=[...carousel.querySelectorAll('.hero-slide')],toggle=carousel.querySelector('.carousel-toggle');
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');let index=0,timer=null,paused=reduced.matches;
- function advance(){const previous=slides[index];previous.classList.remove('is-active');previous.classList.add('is-leaving');previous.setAttribute('aria-hidden','true');index=(index+1)%slides.length;const next=slides[index];next.classList.remove('is-leaving');next.classList.add('is-active');next.setAttribute('aria-hidden','false');}
- function sync(){clearInterval(timer);if(!paused&&!document.hidden)timer=setInterval(advance,5000);}
+ function advance(){
+ const previous=slides[index];
+ previous.classList.remove('is-active');
+ previous.classList.add('is-leaving');
+ previous.setAttribute('aria-hidden','true');
+ // Erst das bisherige Icon vollständig ausblenden, dann das nächste zeigen.
+ setTimeout(()=>{
+  previous.classList.remove('is-leaving');
+  index=(index+1)%slides.length;
+  const next=slides[index];
+  next.classList.remove('is-leaving');
+  next.classList.add('is-active');
+  next.setAttribute('aria-hidden','false');
+ },1250);
+ }
+ function sync(){clearInterval(timer);if(!paused&&!document.hidden)timer=setInterval(advance,8000);}
  document.addEventListener('visibilitychange',sync);reduced.addEventListener('change',()=>{paused=reduced.matches;sync()});sync();
 })();
 
