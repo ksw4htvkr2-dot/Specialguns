@@ -43,3 +43,30 @@ nav a{position:relative}nav a:not(.nav-contact):after{content:'';position:absolu
 
 /* Dark brushed metal: fine directional grain and broad, restrained highlights. */
 body{background-color:#101213;background-image:repeating-linear-gradient(0deg,#ffffff05 0px,#ffffff05 1px,#00000008 1px,#00000008 3px),repeating-linear-gradient(92deg,transparent 0px,transparent 57px,#c4ced003 58px,transparent 60px),linear-gradient(115deg,#090b0c 0%,#191c1e 23%,#101213 43%,#1c1f21 66%,#0c0e0f 100%);background-attachment:fixed;background-size:100% 4px,173px 100%,100% 100%}
+
+/* Holographic hero illustrations with a smooth dissolve between motifs. */
+.hero-carousel{--holo:#a8e1e6;background:radial-gradient(ellipse at 50% 52%,#6dc9d910,transparent 64%)}
+.hero-slide{clip-path:none;opacity:0;transform:translateY(9px) scale(.975);filter:blur(5px);transition:opacity 1150ms ease,transform 1400ms cubic-bezier(.22,1,.36,1),filter 1150ms ease;mix-blend-mode:screen}
+.hero-slide.is-active{opacity:1;transform:translateY(0) scale(1);filter:blur(0);z-index:2}
+.hero-slide.is-leaving{opacity:0;transform:translateY(-7px) scale(1.02);filter:blur(6px);z-index:1}
+.hero-slide svg{filter:grayscale(1) sepia(.22) hue-rotate(130deg) saturate(1.5) brightness(1.65) contrast(1.12) drop-shadow(0 0 3px #a8e1e655) drop-shadow(0 0 20px #79cbd13b);opacity:.83}
+
+.hero-slide:after{content:'';position:absolute;inset:13% 8% 12%;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,#090e1255 3px,#090e1255 4px);opacity:.62;mask-image:radial-gradient(ellipse,#000 30%,transparent 72%);z-index:3}
+.hero-slide:before{content:'';position:absolute;inset:15% 14%;pointer-events:none;background:linear-gradient(180deg,transparent 42%,#a8e1e614 49%,#c7faff22 50%,transparent 58%);animation:holo-scan 7s ease-in-out infinite;mask-image:radial-gradient(ellipse,#000 20%,transparent 70%);z-index:3}
+@keyframes holo-scan{0%,100%{translate:0 -20%;opacity:0}20%{opacity:.65}80%{opacity:.4}90%{translate:0 22%;opacity:0}}
+.hero-carousel:before{border-style:dashed;border-color:#9edee51b;border-top-color:#b7edf13b}
+.hero-carousel:after{border-color:#9edee50c;border-bottom-color:#b7edf12b}
+@media(prefers-reduced-motion:reduce){.hero-slide{transition:none!important;transform:none!important;filter:none!important}.hero-slide:before{animation:none;opacity:0}}
+
+/* Consistent, hand-drawn vector symbols rather than holograms. */
+.hero-slide svg{filter:drop-shadow(0 12px 14px #0005);opacity:1;max-width:95%}
+
+.hero-slide:before,.hero-slide:after{display:none}
+.hero-slide{mix-blend-mode:normal}
+.hero-icon-caption{position:absolute;bottom:35px;left:0;right:0;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:15px;letter-spacing:.025em;color:#bfc3bf}
+.hero-carousel:before{border-style:solid;border-color:#ffffff0a;animation:none}
+.hero-carousel:after{border-color:#ffffff07;animation:none}
+
+/* Subtle pointer repulsion; floating and crossfading remain independent. */
+.hero-slide svg{translate:var(--pointer-x,0px) var(--pointer-y,0px);transition:translate 1.5s cubic-bezier(.25,.46,.45,.94)}
+@media(prefers-reduced-motion:reduce),(hover:none),(pointer:coarse){.hero-slide svg{translate:0 0!important}}
